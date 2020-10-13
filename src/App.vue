@@ -1,12 +1,16 @@
 <template>
-  <EmployeeTable />
+  <div class="small-container">
+    <h1>Employees</h1>
+
+    <employee-table />
+  </div>
 </template>
 
 <script>
 import EmployeeTable from '@/components/EmployeeTable';
 
 export default {
-  name: 'App',
+  name: 'app',
   components: {
     EmployeeTable,
   },
