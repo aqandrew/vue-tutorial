@@ -23,24 +23,11 @@ export default {
   },
   data() {
     return {
-      employees: [
-        {
-          id: 0,
-          name: 'Valastalda',
-          email: 'warlock@riseoftiamat.dnd',
-        },
-        {
-          id: 1,
-          name: 'Ornosti the Bloody',
-          email: 'barbarian@riseoftiamat.dnd',
-        },
-        {
-          id: 2,
-          name: 'Pebble',
-          email: 'bard@riseoftiamat.dnd',
-        },
-      ],
+      employees: [],
     };
+  },
+  mounted() {
+    this.getEmployees();
   },
   methods: {
     addEmployee(employee) {
@@ -60,6 +47,18 @@ export default {
       this.employees = this.employees.map((employee) =>
         employee.id === id ? updatedEmployee : employee
       );
+    },
+    async getEmployees() {
+      try {
+        const response = await fetch(
+          'https://jsonplaceholder.typicode.com/users'
+        );
+        const data = await response.json();
+
+        this.employees = data;
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 };
