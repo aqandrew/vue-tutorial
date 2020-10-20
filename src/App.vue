@@ -46,8 +46,16 @@ export default {
         console.error(error);
       }
     },
-    deleteEmployee(id) {
-      this.employees = this.employees.filter((employee) => employee.id !== id);
+    async deleteEmployee(id) {
+      try {
+        await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+
+        this.employees = this.employees.filter(
+          (employee) => employee.id !== id
+        );
+      } catch (error) {
+        console.error(error);
+      }
     },
     async editEmployee(id, updatedEmployee) {
       try {
