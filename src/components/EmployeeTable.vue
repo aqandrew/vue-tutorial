@@ -11,10 +11,24 @@
       </thead>
       <tbody>
         <tr v-for="employee in employees" :key="employee.id">
-          <td>{{ employee.name }}</td>
-          <td>{{ employee.email }}</td>
-          <td>
-            <button>Edit</button>
+          <td v-if="editing === employee.id">
+            <input type="text" v-model="employee.name" />
+          </td>
+          <td v-else>{{ employee.name }}</td>
+
+          <td v-if="editing === employee.id">
+            <input type="text" v-model="employee.email" />
+          </td>
+          <td v-else>{{ employee.email }}</td>
+
+          <td v-if="editing === employee.id">
+            <button @click="editEmployee(employee)">Save</button>
+            <button @click="cancelEdit(employee)" class="muted-button">
+              Cancel
+            </button>
+          </td>
+          <td v-else>
+            <button @click="editMode(employee)">Edit</button>
             <button @click="handleDelete(employee.id)">Delete</button>
           </td>
         </tr>
@@ -27,9 +41,26 @@
 export default {
   name: 'employee-table',
   props: { employees: Array },
+  data() {
+    return { editing: null };
+  },
   methods: {
     handleDelete(id) {
       this.$emit('delete-employee', id);
+    },
+    editMode(employee) {
+      this.cachedEmployee = { ...employee };
+      this.editing = employee.id;
+    },
+    cancelEdit(employee) {
+      Object.assign(employee, this.cachedEmployee);
+      this.editing = null;
+    },
+    editEmployee(employee) {
+      if (employee.name === '' || employee.email === '') return;
+
+      this.$emit('edit-employee', employee.id, employee);
+      this.editing = null;
     },
   },
 };
